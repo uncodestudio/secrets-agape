@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Les Secrets d'Agapë — Dev</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4/dist/css/splide.min.css" />
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: sans-serif; margin: 0; padding: 4rem 2rem; background: #f4f2ee; }
+    h1 { margin-bottom: 2rem; }
+    .blog_slider { max-width: 1200px; margin: 0 auto; }
+    .blog_card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+    .blog_card img { width: 100%; height: 180px; object-fit: cover; display: block; }
+    .blog_card-content { padding: 1.25rem; }
+    .blog_card-content h3 { margin: 0 0 0.5rem; }
+    .blog_card-content p { margin: 0; color: #666; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>Test — blog_slider (Splide)</h1>
+
+  <div class="splide blog_slider">
+    <div class="splide__track">
+      <ul class="splide__list">
+        <li class="splide__slide">
+          <div class="blog_card">
+            <img src="https://picsum.photos/seed/1/600/400" alt="" />
+            <div class="blog_card-content">
+              <h3>Article 1</h3>
+              <p>Résumé court de l'article numéro 1.</p>
+            </div>
+          </div>
+        </li>
+        <li class="splide__slide">
+          <div class="blog_card">
+            <img src="https://picsum.photos/seed/2/600/400" alt="" />
+            <div class="blog_card-content">
+              <h3>Article 2</h3>
+              <p>Résumé court de l'article numéro 2.</p>
+            </div>
+          </div>
+        </li>
+        <li class="splide__slide">
+          <div class="blog_card">
+            <img src="https://picsum.photos/seed/3/600/400" alt="" />
+            <div class="blog_card-content">
+              <h3>Article 3</h3>
+              <p>Résumé court de l'article numéro 3.</p>
+            </div>
+          </div>
+        </li>
+        <li class="splide__slide">
+          <div class="blog_card">
+            <img src="https://picsum.photos/seed/4/600/400" alt="" />
+            <div class="blog_card-content">
+              <h3>Article 4</h3>
+              <p>Résumé court de l'article numéro 4.</p>
+            </div>
+          </div>
+        </li>
+        <li class="splide__slide">
+          <div class="blog_card">
+            <img src="https://picsum.photos/seed/5/600/400" alt="" />
+            <div class="blog_card-content">
+              <h3>Article 5</h3>
+              <p>Résumé court de l'article numéro 5.</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4/dist/js/splide.min.js"></script>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>
