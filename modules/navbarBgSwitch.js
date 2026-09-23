@@ -13,7 +13,9 @@ export function init() {
   const darkSections = document.querySelectorAll('[data-bg-dark]')
   if (!navbar || !darkSections.length) return
 
-  const targets = TARGET_SELECTORS.flatMap((selector) => Array.from(navbar.querySelectorAll(selector)))
+  const targets = TARGET_SELECTORS.flatMap((selector) => Array.from(navbar.querySelectorAll(selector))).filter(
+    (el) => !el.matches('.wishlist_link.is-mobile')
+  )
   if (!targets.length) return
 
   const activeSections = new Set()
