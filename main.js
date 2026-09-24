@@ -5,6 +5,8 @@ import { init as initParallaxImage } from './modules/parallaxImage.js'
 import { init as initSlideIn } from './modules/slideIn.js'
 import { init as initNavbarBgSwitch } from './modules/navbarBgSwitch.js'
 import { init as initLogoMarquee } from './modules/logoMarquee.js'
+import { init as initProductFilterToggle } from './modules/productFilterToggle.js'
+import { init as initProductModal } from './modules/productModal.js'
 
 const moduleDetectors = {
   blogSlider: { selector: '.blog_slider', initFn: initBlogSlider },
@@ -13,13 +15,27 @@ const moduleDetectors = {
   slideIn: { selector: '[data-slide-in]', initFn: initSlideIn },
   navbarBgSwitch: { selector: '.navbar_component', initFn: initNavbarBgSwitch },
   logoMarquee: { selector: '.logo_component', initFn: initLogoMarquee },
+  productFilterToggle: { selector: '.product-filter_content', initFn: initProductFilterToggle },
+  productModal: { selector: '.product_modal-wrapper', initFn: initProductModal },
 }
 
+// DEBUG — à retirer
+console.log('[agape] main.js chargé', { gsap: typeof gsap, ScrollTrigger: typeof ScrollTrigger, Splide: typeof Splide })
+
 Object.entries(moduleDetectors).forEach(([name, { selector, initFn }]) => {
-  if (!document.querySelector(selector)) return
+  if (!document.querySelector(selector)) {
+    console.log(`[agape] ${name} ignoré (aucun ${selector})`)
+    return
+  }
   try {
+    console.log(`[agape] ${name} init`)
     initFn()
   } catch (e) {
     console.error(`[${name}]`, e)
   }
+})
+
+// Recharge la page quand on franchit un breakpoint Webflow, pour repartir d'un état propre
+;[991, 767, 479].forEach((bp) => {
+  window.matchMedia(`(max-width: ${bp}px)`).addEventListener('change', () => location.reload())
 })
