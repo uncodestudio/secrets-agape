@@ -31,19 +31,9 @@ export function init() {
   const renderSlide = () => (modal.style.translate = `0 ${slide.y}px`)
   renderSlide()
 
-  // L'ordre des classes compte pour les combo classes Webflow : is-modal doit précéder gap-xtiny_8px
-  const setContentModalClass = (el, active) => {
-    const classes = [...el.classList].filter((c) => c !== 'is-modal')
-    if (active) {
-      const gapIndex = classes.indexOf('gap-xtiny_8px')
-      classes.splice(gapIndex === -1 ? classes.length : gapIndex, 0, 'is-modal')
-    }
-    el.className = classes.join(' ')
-  }
-
   const setModalClasses = (active) => {
     component?.classList.toggle('is-modal', active)
-    contents.forEach((el) => setContentModalClass(el, active))
+    contents.forEach((el) => el.classList.toggle('is-modal', active))
   }
 
   const setClosedClasses = (closed) => {
