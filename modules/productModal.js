@@ -33,7 +33,8 @@ export function init() {
 
   const setModalClasses = (active) => {
     component?.classList.toggle('is-modal', active)
-    contents.forEach((el) => el.classList.toggle('is-modal', active))
+    // Mise en page du mode modale gérée en custom CSS (voir .layout-is-modal dans Webflow)
+    contents.forEach((el) => el.classList.toggle('layout-is-modal', active))
   }
 
   const setClosedClasses = (closed) => {
