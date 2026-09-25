@@ -10,6 +10,7 @@ import { init as initProductModal } from './modules/productModal.js'
 import { init as initProductGallery } from './modules/productGallery.js'
 import { init as initProductTabs } from './modules/productTabs.js'
 import { init as initProductCardSlider } from './modules/productCardSlider.js'
+import { init as initShareButton } from './modules/shareButton.js'
 
 const moduleDetectors = {
   blogSlider: { selector: '.blog_slider', initFn: initBlogSlider },
@@ -23,6 +24,7 @@ const moduleDetectors = {
   productGallery: { selector: '.product-gallery_main', initFn: initProductGallery },
   productTabs: { selector: '.product-header_tab-item', initFn: initProductTabs },
   productCardSlider: { selector: '.splide.is-accessoires, .splide.is-robes', initFn: initProductCardSlider },
+  shareButton: { selector: '[data-share="true"]', initFn: initShareButton },
 }
 
 // DEBUG — à retirer
