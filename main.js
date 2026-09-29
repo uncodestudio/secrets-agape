@@ -13,6 +13,8 @@ import { init as initProductCardSlider } from './modules/productCardSlider.js'
 import { init as initShareButton } from './modules/shareButton.js'
 import { init as initFormValidation } from './modules/formValidation.js'
 import { init as initWishlist } from './modules/wishlist.js'
+import { init as initShareModal } from './modules/shareModal.js'
+import { init as initCopyUrl } from './modules/copyUrl.js'
 
 const moduleDetectors = {
   blogSlider: { selector: '.blog_slider', initFn: initBlogSlider },
@@ -29,6 +31,8 @@ const moduleDetectors = {
   shareButton: { selector: '[data-share="true"]', initFn: initShareButton },
   formValidation: { selector: '.form_input[required]', initFn: initFormValidation },
   wishlist: { selector: '[data-wishlist-button], [data-wishlist-item], .wishlist_link', initFn: initWishlist },
+  shareModal: { selector: '.modal-share_wrapper', initFn: initShareModal },
+  copyUrl: { selector: '[data-copy-url], [data-share-social]', initFn: initCopyUrl },
 }
 
 // DEBUG — à retirer

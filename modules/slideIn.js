@@ -1,6 +1,7 @@
-const OFFSET_Y = 60
-const DURATION = 1.1
-const EASE = 'power3.out'
+// Apparition douce : petit décalage, durée longue, décélération progressive
+const OFFSET_Y = 32
+const DURATION = 1.6
+const EASE = 'power2.out'
 
 export function init() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return
@@ -17,7 +18,7 @@ export function init() {
       ease: EASE,
       scrollTrigger: {
         trigger: el,
-        start: 'top 85%',
+        start: 'top 90%',
         toggleActions: 'play none none none',
       },
     })

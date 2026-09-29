@@ -10,20 +10,22 @@ const TARGET_SELECTORS = [
 
 export function init() {
   const navbar = document.querySelector('.navbar_component')
-  const darkSections = document.querySelectorAll('[data-bg-dark]')
-  if (!navbar || !darkSections.length) return
+  const blurSections = document.querySelectorAll('[data-bg-blur]')
+  if (!navbar || !blurSections.length) return
 
-  const targets = TARGET_SELECTORS.flatMap((selector) => Array.from(navbar.querySelectorAll(selector))).filter(
-    (el) => !el.matches('.wishlist_link.is-mobile')
-  )
-  if (!targets.length) return
+  const targets = [
+    navbar,
+    ...TARGET_SELECTORS.flatMap((selector) => Array.from(navbar.querySelectorAll(selector))).filter(
+      (el) => !el.matches('.wishlist_link.is-mobile')
+    ),
+  ]
 
   const activeSections = new Set()
   let observer
 
   const applyState = () => {
-    const isWhite = activeSections.size > 0
-    targets.forEach((el) => el.classList.toggle('is-white', isWhite))
+    const isBlured = activeSections.size > 0
+    targets.forEach((el) => el.classList.toggle('is-blured', isBlured))
   }
 
   const handleEntries = (entries) => {
@@ -43,7 +45,7 @@ export function init() {
       rootMargin: `0px 0px -${window.innerHeight - navHeight}px 0px`,
       threshold: 0,
     })
-    darkSections.forEach((section) => observer.observe(section))
+    blurSections.forEach((section) => observer.observe(section))
   }
 
   createObserver()
