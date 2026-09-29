@@ -21,9 +21,10 @@ export function init() {
   document.body.appendChild(modal)
 
   const contents = document.querySelectorAll('.product-filter_content')
-  const button = document.querySelector('.product-modal_button')
+  const toggle = document.querySelector('.product-modal_top-layout')
   const icon = document.querySelector('.product-modal_icon')
   const divider = document.querySelector('.product-modal_divider')
+  const dividerWrapper = document.querySelector('.product-modal_divider-wrapper')
   let isOpen = false
 
   // Anime la propriété CSS `translate` plutôt que `transform`, pour ne pas écraser le positionnement Webflow
@@ -39,6 +40,7 @@ export function init() {
 
   const setClosedClasses = (closed) => {
     divider?.classList.toggle('is-close', closed)
+    dividerWrapper?.classList.toggle('is-close', closed)
     component?.classList.toggle('is-close', closed)
     form.style.display = closed ? 'none' : ''
   }
@@ -131,6 +133,7 @@ export function init() {
     setModalClasses(false)
     component?.classList.remove('is-close')
     divider?.classList.remove('is-close')
+    dividerWrapper?.classList.remove('is-close')
     form.style.display = ''
     resetContents()
     isOpen = false
@@ -182,5 +185,5 @@ export function init() {
     return reset
   })
 
-  button?.addEventListener('click', () => setOpen(!isOpen))
+  toggle?.addEventListener('click', () => setOpen(!isOpen))
 }

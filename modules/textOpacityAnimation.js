@@ -1,4 +1,4 @@
-const START_OPACITY = 0.5
+const START_OPACITY = 0.2
 
 export function init() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return

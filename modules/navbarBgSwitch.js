@@ -23,9 +23,15 @@ export function init() {
   const activeSections = new Set()
   let observer
 
+  // Tablette et mobile : les liens sont dans le menu déroulant, ils ne changent pas de style
+  const tabletQuery = window.matchMedia('(max-width: 991px)')
+
   const applyState = () => {
     const isBlured = activeSections.size > 0
-    targets.forEach((el) => el.classList.toggle('is-blured', isBlured))
+    targets.forEach((el) => {
+      const skip = tabletQuery.matches && el.matches('.navbar_link')
+      el.classList.toggle('is-blured', isBlured && !skip)
+    })
   }
 
   const handleEntries = (entries) => {
