@@ -13,7 +13,8 @@ function setupMarquee(marquee, mq) {
 
   const originalHTML = content.innerHTML
   const isRight = marquee.dataset.direction === 'right'
-  const speed = +marquee.dataset.speed || 15
+  // Durée d'un tour complet en secondes (plus c'est grand, plus c'est lent), réglable via data-speed
+  const speed = +marquee.dataset.speed || 30
 
   let tl = null
   let onEnter = null

@@ -20,7 +20,7 @@ const moduleDetectors = {
   blogSlider: { selector: '.blog_slider', initFn: initBlogSlider },
   textOpacityAnimation: { selector: '.text-opacity-animation', initFn: initTextOpacityAnimation },
   parallaxImage: { selector: '.home-showroom_image', initFn: initParallaxImage },
-  slideIn: { selector: '[data-slide-in]', initFn: initSlideIn },
+  slideIn: { selector: '[data-slide-in], [data-slide-in-stagger]', initFn: initSlideIn },
   navbarBgSwitch: { selector: '.navbar_component', initFn: initNavbarBgSwitch },
   logoMarquee: { selector: '.logo_component', initFn: initLogoMarquee },
   productFilterToggle: { selector: '.product-filter_content', initFn: initProductFilterToggle },
