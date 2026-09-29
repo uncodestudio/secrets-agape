@@ -15,10 +15,15 @@ const SELECTORS = {
 
 // ---------- Stockage ----------
 
+// Type en minuscules : « Robe » et « robe » désignent la même collection
+const normalizeType = (type) => (type || '').trim().toLowerCase()
+
 const read = () => {
   try {
     const list = JSON.parse(localStorage.getItem(STORAGE_KEY))
-    return Array.isArray(list) ? list : []
+    if (!Array.isArray(list)) return []
+    // Nettoie les entrées incomplètes et harmonise les types déjà enregistrés
+    return list.filter((p) => p && p.id && p.type).map((p) => ({ ...p, type: normalizeType(p.type) }))
   } catch {
     return []
   }
@@ -32,15 +37,17 @@ const write = (list) => {
   }
 }
 
-const keyOf = (el) => `${el.dataset.wishlistType}:${el.dataset.wishlistId}`
+const keyOf = (el) => `${normalizeType(el.dataset.wishlistType)}:${el.dataset.wishlistId}`
 const has = (list, key) => list.some((p) => `${p.type}:${p.id}` === key)
 
 const toggle = (el) => {
   const list = read()
+  // Bouton sans slug ou sans type : rien à enregistrer
+  if (!el.dataset.wishlistId || !normalizeType(el.dataset.wishlistType)) return list
   const key = keyOf(el)
   const next = has(list, key)
     ? list.filter((p) => `${p.type}:${p.id}` !== key)
-    : [...list, { type: el.dataset.wishlistType, id: el.dataset.wishlistId, name: el.dataset.wishlistName || '' }]
+    : [...list, { type: normalizeType(el.dataset.wishlistType), id: el.dataset.wishlistId, name: el.dataset.wishlistName || '' }]
   write(next)
   return next
 }
@@ -120,7 +127,7 @@ const updateSections = () => {
   })
 
   const countOf = (type) =>
-    document.querySelectorAll(`${SELECTORS.item}.is-wishlisted[data-wishlist-type="${type}"]`).length
+    [...document.querySelectorAll(`${SELECTORS.item}.is-wishlisted`)].filter((el) => normalizeType(el.dataset.wishlistType) === type).length
   const robes = countOf('robe')
   const accessoires = countOf('accessoire')
   const total = robes + accessoires
