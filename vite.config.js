@@ -26,7 +26,7 @@ export default defineConfig({
   },
   
   server: {
-    port: 3000,
+    port: 3003, // port propre au site (R-29), aussi dans la ligne localhost de Webflow
     strictPort: true,
     open: false,
     cors: true
