@@ -1,15 +1,13 @@
-const BREAKPOINT = 991
-
 export function init() {
   if (typeof gsap === 'undefined') return
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-  const mq = window.matchMedia(`(max-width: ${BREAKPOINT}px)`)
-  document.querySelectorAll('.logo_component').forEach((marquee) => setupMarquee(marquee, mq))
+  document.querySelectorAll('.logo_component').forEach(setupMarquee)
 }
 
-function setupMarquee(marquee, mq) {
+function setupMarquee(marquee) {
   const content = marquee.firstElementChild
-  if (!content) return
+  if (!content || !content.children.length) return
 
   const originalHTML = content.innerHTML
   const isRight = marquee.dataset.direction === 'right'
@@ -17,63 +15,59 @@ function setupMarquee(marquee, mq) {
   const speed = +marquee.dataset.speed || 30
 
   let tl = null
-  let onEnter = null
-  let onLeave = null
+  let lastWidth = 0
 
-  const enable = () => {
-    if (tl) return
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  const build = () => {
+    const width = marquee.offsetWidth
+    if (!width || width === lastWidth) return
+    lastWidth = width
 
-    // Duplication pour boucle infinie
-    content.innerHTML = originalHTML + originalHTML
+    const progress = tl ? tl.progress() : 0
+    const paused = tl ? tl.paused() : false
+    if (tl) tl.kill()
+    content.innerHTML = originalHTML
+    gsap.set(content, { clearProps: 'transform' })
 
-    // Force GPU
-    gsap.set(content, {
-      force3D: true,
-      xPercent: isRight ? -50 : 0,
-    })
+    const items = [...content.children]
+    const first = items[0]
+    const last = items[items.length - 1]
+    const setWidth = last.offsetLeft + last.offsetWidth - first.offsetLeft
+    if (!setWidth) return
 
-    if (isRight) {
-      // Droite → Gauche avec wrap seamless
-      tl = gsap.to(content, {
-        xPercent: 0,
-        duration: speed,
-        ease: 'none',
-        repeat: -1,
-        modifiers: {
-          xPercent: gsap.utils.wrap(-50, 0),
-        },
-      })
-    } else {
-      // Gauche → Droite avec wrap seamless
-      tl = gsap.to(content, {
-        xPercent: -50,
-        duration: speed,
-        ease: 'none',
-        repeat: -1,
-        modifiers: {
-          xPercent: gsap.utils.wrap(0, -50),
-        },
+    // Assez de copies pour couvrir la largeur visible, quel que soit l'écran
+    const copies = Math.ceil(width / setWidth) + 1
+    for (let i = 0; i < copies; i++) {
+      items.forEach((item) => {
+        const clone = item.cloneNode(true)
+        clone.setAttribute('aria-hidden', 'true')
+        content.appendChild(clone)
       })
     }
 
-    onEnter = () => tl.pause()
-    onLeave = () => tl.play()
-    marquee.addEventListener('mouseenter', onEnter)
-    marquee.addEventListener('mouseleave', onLeave)
+    // Distance d'un tour mesurée en pixels (espacements compris, padding de la liste exclu) pour une boucle sans saut
+    const distance = content.children[items.length].offsetLeft - first.offsetLeft
+    const wrap = gsap.utils.wrap(-distance, 0)
+
+    gsap.set(content, { force3D: true, x: isRight ? -distance : 0 })
+    tl = gsap.to(content, {
+      x: isRight ? 0 : -distance,
+      duration: speed,
+      ease: 'none',
+      repeat: -1,
+      modifiers: { x: (x) => wrap(parseFloat(x)) + 'px' },
+    })
+    tl.progress(progress)
+    if (paused) tl.pause()
   }
 
-  const disable = () => {
-    if (!tl) return
+  marquee.addEventListener('mouseenter', () => tl && tl.pause())
+  marquee.addEventListener('mouseleave', () => tl && tl.play())
 
-    tl.kill()
-    tl = null
-    marquee.removeEventListener('mouseenter', onEnter)
-    marquee.removeEventListener('mouseleave', onLeave)
-    gsap.set(content, { clearProps: 'transform' })
-    content.innerHTML = originalHTML
-  }
-
-  mq.addEventListener('change', (e) => (e.matches ? enable() : disable()))
-  if (mq.matches) enable()
+  build()
+  // Recalcule si la largeur change (redimensionnement, logos chargés après coup)
+  new ResizeObserver(build).observe(marquee)
+  window.addEventListener('load', () => {
+    lastWidth = 0
+    build()
+  })
 }
