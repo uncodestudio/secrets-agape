@@ -9,6 +9,10 @@ function setupMarquee(marquee) {
   const content = marquee.firstElementChild
   if (!content || !content.children.length) return
 
+  // Logos chargés tout de suite : en lazy, leur largeur vaut 0 au lancement et la bande ne peut pas être mesurée
+  const images = [...content.querySelectorAll('img')]
+  images.forEach((img) => (img.loading = 'eager'))
+
   const originalHTML = content.innerHTML
   const isRight = marquee.dataset.direction === 'right'
   // Durée d'un tour complet en secondes (plus c'est grand, plus c'est lent), réglable via data-speed
@@ -63,11 +67,16 @@ function setupMarquee(marquee) {
   marquee.addEventListener('mouseenter', () => tl && tl.pause())
   marquee.addEventListener('mouseleave', () => tl && tl.play())
 
-  build()
-  // Recalcule si la largeur change (redimensionnement, logos chargés après coup)
-  new ResizeObserver(build).observe(marquee)
-  window.addEventListener('load', () => {
+  const rebuild = () => {
     lastWidth = 0
     build()
+  }
+
+  build()
+  // Recalcule si la largeur change (redimensionnement) ou quand un logo finit de charger
+  new ResizeObserver(build).observe(marquee)
+  images.forEach((img) => {
+    if (!img.complete) img.addEventListener('load', rebuild, { once: true })
   })
+  window.addEventListener('load', rebuild)
 }
